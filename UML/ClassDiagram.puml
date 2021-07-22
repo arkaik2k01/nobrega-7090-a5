@@ -1,6 +1,43 @@
 @startuml
 'https://plantuml.com/class-diagram
 
+class javafx.Application {
+    start()
+    main()
+}
 
+class Item {
+    String name
+    String serialNumber
+    BigDecimal price
+
+    get()
+    set()
+    toString()
+}
+
+class FileLoader {
+
+    readFromTXT()
+    readFromHTML()
+    readFromJSON()
+
+}
+
+class FileSaver {
+
+    readToTxt()
+    readToHTML()
+    readToJSON()
+
+}
+
+class InventoryController {
+}
+
+javafx.Application*--InventoryController
+InventoryController--FileLoader
+InventoryController--Item
+InventoryController--FileSaver
 
 @enduml
