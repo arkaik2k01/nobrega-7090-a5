@@ -24,3 +24,7 @@ javafx {
     version = "16"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
+
+application {
+    mainClassName = 'ucf.assignment.App'
+}
