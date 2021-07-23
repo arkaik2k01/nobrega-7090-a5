@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignment.InventoryController">
+   <children>
+      <MenuBar prefHeight="33.0" prefWidth="1200.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem mnemonicParsing="false" text="Load" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane layoutY="600.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="1200.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <MenuButton layoutX="1085.0" layoutY="14.0" mnemonicParsing="false" text="Search by....">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#searchBySerial" text="Serial" />
+                      <MenuItem mnemonicParsing="false" onAction="#searchByName" text="Name" />
+                    </items>
+                  </MenuButton>
+                  <TextField fx:id="searchText" layoutX="900.0" layoutY="14.0" prefHeight="25.0" prefWidth="175.0" promptText="Type item to search..." />
+                  <TextField fx:id="nameText" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="200.0" promptText="Name..." />
+                  <TextField fx:id="serialText" layoutX="14.0" layoutY="44.0" prefHeight="25.0" prefWidth="200.0" promptText="Serial..." />
+                  <TextField fx:id="priceText" layoutX="14.0" layoutY="74.0" prefHeight="25.0" prefWidth="200.0" promptText="Price..." />
+                  <Button layoutX="14.0" layoutY="104.0" mnemonicParsing="false" text="New..." />
+                  <Button layoutX="14.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete selected..." />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <TableView fx:id="invTable" layoutY="33.0" prefHeight="561.0" prefWidth="1200.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" maxWidth="400.0" onEditCommit="#editName" prefWidth="400.0" text="NAME" />
+          <TableColumn fx:id="serialColumn" maxWidth="400.0" minWidth="0.0" onEditCommit="#editSerial" prefWidth="400.0" text="SERIAL" />
+            <TableColumn fx:id="priceColumn" maxWidth="400.0" onEditCommit="#editPrice" prefWidth="400.0" text="PRICE" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
