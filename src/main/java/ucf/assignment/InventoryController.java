@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import java.math.BigDecimal;
 
@@ -40,7 +41,7 @@ public class InventoryController {
     private TableColumn<Item, String> serialColumn;
 
     @FXML
-    private TableColumn<Item, BigDecimal> priceColumn;
+    private TableColumn<Item, String> priceColumn;
 
     //File chooser
     FileChooser filer = new FileChooser();
@@ -48,9 +49,10 @@ public class InventoryController {
     public void initialize()
     {
         //Table initializer
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
-        serialColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
-        priceColumn.setCellValueFactory(new PropertyValueFactory<Item, BigDecimal>("price"));
+        invTable.setEditable(true);
+        initializeNameColumn();
+        initializeSerialColumn();
+        initializePriceColumn();
         invTable.setItems(invData);
 
         //File chooser initializer
@@ -59,36 +61,89 @@ public class InventoryController {
                 new FileChooser.ExtensionFilter("JSON", "*.json"));
     }
 
-    void throwSerialError()
+    void initializeNameColumn() {
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
+        nameColumn.setOnEditCommit(
+                event -> {
+                    String newName = event.getNewValue();
+                    if(checkIfNameNotValid(newName))
+                    {
+                        newName = event.getOldValue();
+                    }
+                    event.getTableView().getItems().get(event.getTablePosition().getRow())
+                            .setName(newName);
+                    invTable.refresh();
+                }
+        );
+    }
+
+    void initializeSerialColumn() {
+        serialColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        serialColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
+        serialColumn.setOnEditCommit(event -> {
+            String newSerial = event.getNewValue();
+            if(checkIfSerialNotValid(newSerial, invData))
+            {
+                newSerial = event.getOldValue();
+            }
+            event.getTableView().getItems().get(event.getTablePosition().getRow())
+                    .setSerialNumber(newSerial);
+            invTable.refresh();
+        });
+    }
+
+    void initializePriceColumn() {
+        priceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        priceColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("price"));
+        priceColumn.setOnEditCommit(event -> {
+            BigDecimal newPrice = new BigDecimal(event.getNewValue());
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setPrice(newPrice.toString());
+            invTable.refresh();
+        });
+    }
+
+    void throwError(String title, String desc)
     {
         nameText.clear();
         serialText.clear();
         priceText.clear();
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText("NON VALID SERIAL");
-        alert.setContentText("Your serial number is invalid. Please refer to the readme");
+        alert.setHeaderText(title);
+        alert.setContentText(desc);
         alert.showAndWait();
     }
 
-    boolean checkIfSerialNotValid(String serial)
+    boolean checkIfSerialNotValid(String serial, ObservableList<Item> invData)
     {
         final boolean[] isNotValid = {false};
 
         if(serial.length() != 10)
         {
-            throwSerialError();
+            throwError("NON VALID SERIAL", "Your serial number is not 10 characters in length");
             isNotValid[0] = true;
         }
         //For each item in invData, check if serial is equals to item's serial number
         invData.forEach(item -> {
             if(item.getSerialNumber().equalsIgnoreCase(serial))
             {
-                throwSerialError();
+                throwError("NON VALID SERIAL", "The serial number you have added already exists");
                 isNotValid[0] = true;
             }
         });
 
         return isNotValid[0];
+    }
+
+    boolean checkIfNameNotValid(String name)
+    {
+        boolean isNotValid = false;
+        if(!(name.length() >= 2 && name.length() <= 256))
+        {
+            throwError("NON VALID NAME", "Your name is not within the range of chars allowed for names");
+            isNotValid = true;
+        }
+        return isNotValid;
     }
 
     //GUI Actions
@@ -97,10 +152,14 @@ public class InventoryController {
     {
         //Get text from nameText
         String name = nameText.getText();
+        if(checkIfNameNotValid(name))
+        {
+            return;
+        }
         //Get text from serialText
         String serial = serialText.getText();
         //Check text length == 10 and not repeated, if not return
-        if(checkIfSerialNotValid(serial))
+        if(checkIfSerialNotValid(serial, invData))
         {
             return;
         }
@@ -118,36 +177,6 @@ public class InventoryController {
         Item toRemove = invTable.getFocusModel().getFocusedItem();
         //Remove item from observable list
         invData.remove(toRemove);
-    }
-
-    @FXML
-    void editName(ActionEvent event) {
-        //Save previous name to String
-        //Get new string from table
-        //If greater than 256 or less than 2 chars
-            //return
-        //Set item name to new string
-    }
-
-    @FXML
-    void editPrice(ActionEvent event) {
-        //Save previous price to BigDecimal vars
-        //Get new price from table
-        //If not a number
-            //return
-        //Set item price to new price
-    }
-
-    @FXML
-    void editSerial(ActionEvent event) {
-        //SAve previous serial to String vars
-        //Get new string from table
-        //If new string not 10 chars in length
-            //return
-        //iterate through tableView
-            //if serial number to change == existing serial number
-                //return
-        //Set item serial to new serial
     }
 
     @FXML

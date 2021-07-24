@@ -7,13 +7,13 @@ public class Item
 {
     String name;
     String serialNumber;
-    BigDecimal price;
+    String price;
 
     public Item(String name, String serialNumber, BigDecimal price)
     {
         this.name = name;
         this.serialNumber = serialNumber;
-        this.price = price.setScale(2, RoundingMode.HALF_EVEN);
+        this.price = price.setScale(2, RoundingMode.HALF_EVEN).toString();
     }
 
     public String getName()
@@ -36,13 +36,13 @@ public class Item
         this.serialNumber = serialNumber;
     }
 
-    public BigDecimal getPrice()
+    public String getPrice()
     {
         return price;
     }
 
-    public void setPrice(BigDecimal price)
+    public void setPrice(String price)
     {
-        this.price = price;
+        this.price = new BigDecimal(price).setScale(2, RoundingMode.HALF_EVEN).toString();
     }
 }

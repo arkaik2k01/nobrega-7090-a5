@@ -45,9 +45,9 @@
       </SplitPane>
       <TableView fx:id="invTable" editable="true" layoutY="33.0" prefHeight="561.0" prefWidth="1200.0">
         <columns>
-          <TableColumn fx:id="nameColumn" maxWidth="400.0" onEditCommit="#editName" prefWidth="400.0" text="NAME" />
-          <TableColumn fx:id="serialColumn" maxWidth="400.0" minWidth="0.0" onEditCommit="#editSerial" prefWidth="400.0" text="SERIAL" />
-            <TableColumn fx:id="priceColumn" maxWidth="400.0" onEditCommit="#editPrice" prefWidth="400.0" text="PRICE" />
+          <TableColumn fx:id="nameColumn" maxWidth="400.0" prefWidth="400.0" text="NAME" />
+          <TableColumn fx:id="serialColumn" maxWidth="400.0" minWidth="0.0" prefWidth="400.0" text="SERIAL" />
+            <TableColumn fx:id="priceColumn" maxWidth="400.0" prefWidth="400.0" text="PRICE" />
         </columns>
       </TableView>
    </children>
