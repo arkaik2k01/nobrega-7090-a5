@@ -1,13 +1,20 @@
 package ucf.assignment;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import java.math.BigDecimal;
 
 public class InventoryController {
 
+    //Buttons
     @FXML
     private TextField searchText;
 
@@ -20,17 +27,90 @@ public class InventoryController {
     @FXML
     private TextField priceText;
 
-    @FXML
-    private TableView<?> invTable;
+    //Table & List
+    private ObservableList<Item> invData = FXCollections.observableArrayList();
 
     @FXML
-    private TableColumn<?, ?> nameColumn;
+    private TableView<Item> invTable;
 
     @FXML
-    private TableColumn<?, ?> serialColumn;
+    private TableColumn<Item, String> nameColumn;
 
     @FXML
-    private TableColumn<?, ?> priceColumn;
+    private TableColumn<Item, String> serialColumn;
+
+    @FXML
+    private TableColumn<Item, BigDecimal> priceColumn;
+
+    //File chooser
+    FileChooser filer = new FileChooser();
+
+    public void initialize()
+    {
+        //Table initializer
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
+        serialColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<Item, BigDecimal>("price"));
+        invTable.setItems(invData);
+
+        //File chooser initializer
+        filer.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TSV", "*.txt"),
+                new FileChooser.ExtensionFilter("HTML", "*.html"),
+                new FileChooser.ExtensionFilter("JSON", "*.json"));
+    }
+
+    void throwSerialError()
+    {
+        nameText.clear();
+        serialText.clear();
+        priceText.clear();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("NON VALID SERIAL");
+        alert.setContentText("Your serial number is invalid. Please refer to the readme");
+        alert.showAndWait();
+    }
+
+    boolean checkIfSerialNotValid(String serial)
+    {
+        final boolean[] isNotValid = {false};
+
+        if(serial.length() != 10)
+        {
+            throwSerialError();
+            isNotValid[0] = true;
+        }
+        //For each item in invData, check if serial is equals to item's serial number
+        invData.forEach(item -> {
+            if(item.getSerialNumber().equalsIgnoreCase(serial))
+            {
+                throwSerialError();
+                isNotValid[0] = true;
+            }
+        });
+
+        return isNotValid[0];
+    }
+
+    //GUI Actions
+    @FXML
+    void newItem(ActionEvent actionEvent)
+    {
+        //Get text from nameText
+        String name = nameText.getText();
+        //Get text from serialText
+        String serial = serialText.getText();
+        //Check text length == 10 and not repeated, if not return
+        if(checkIfSerialNotValid(serial))
+        {
+            return;
+        }
+        //Get number from priceText
+        BigDecimal price = new BigDecimal(priceText.getText());
+        //Create item with given information
+        Item newItem = new Item(name, serial, price);
+        //Add to list
+        invData.add(newItem);
+    }
 
     @FXML
     void deleteItem(ActionEvent event) {
@@ -60,7 +140,7 @@ public class InventoryController {
     void editSerial(ActionEvent event) {
         //SAve previous serial to String vars
         //Get new string from table
-        //If new string not 8 chars in length
+        //If new string not 10 chars in length
             //return
         //iterate through tableView
             //if serial number to change == existing serial number
@@ -85,5 +165,4 @@ public class InventoryController {
                 //update table view and scroll to item
         //Send alert "No item with serial found"
     }
-
 }

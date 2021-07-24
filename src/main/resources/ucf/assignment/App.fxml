@@ -11,7 +11,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignment.InventoryController">
    <children>
       <MenuBar prefHeight="33.0" prefWidth="1200.0">
@@ -38,13 +37,13 @@
                   <TextField fx:id="nameText" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="200.0" promptText="Name..." />
                   <TextField fx:id="serialText" layoutX="14.0" layoutY="44.0" prefHeight="25.0" prefWidth="200.0" promptText="Serial..." />
                   <TextField fx:id="priceText" layoutX="14.0" layoutY="74.0" prefHeight="25.0" prefWidth="200.0" promptText="Price..." />
-                  <Button layoutX="14.0" layoutY="104.0" mnemonicParsing="false" text="New..." />
+                  <Button layoutX="14.0" layoutY="104.0" mnemonicParsing="false" onAction="#newItem" text="New..." />
                   <Button layoutX="14.0" layoutY="159.0" mnemonicParsing="false" onAction="#deleteItem" text="Delete selected..." />
                </children>
             </AnchorPane>
         </items>
       </SplitPane>
-      <TableView fx:id="invTable" layoutY="33.0" prefHeight="561.0" prefWidth="1200.0">
+      <TableView fx:id="invTable" editable="true" layoutY="33.0" prefHeight="561.0" prefWidth="1200.0">
         <columns>
           <TableColumn fx:id="nameColumn" maxWidth="400.0" onEditCommit="#editName" prefWidth="400.0" text="NAME" />
           <TableColumn fx:id="serialColumn" maxWidth="400.0" minWidth="0.0" onEditCommit="#editSerial" prefWidth="400.0" text="SERIAL" />
