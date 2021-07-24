@@ -115,7 +115,9 @@ public class InventoryController {
     @FXML
     void deleteItem(ActionEvent event) {
         //Get selected item from table
+        Item toRemove = invTable.getFocusModel().getFocusedItem();
         //Remove item from observable list
+        invData.remove(toRemove);
     }
 
     @FXML

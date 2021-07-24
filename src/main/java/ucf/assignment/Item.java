@@ -1,6 +1,7 @@
 package ucf.assignment;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Item
 {
@@ -12,7 +13,7 @@ public class Item
     {
         this.name = name;
         this.serialNumber = serialNumber;
-        this.price = price;
+        this.price = price.setScale(2, RoundingMode.HALF_EVEN);
     }
 
     public String getName()
