@@ -1,10 +1,13 @@
 package ucf.assignment;
 
+import javafx.collections.ObservableList;
+
 import java.io.File;
 
 public class FileSaver
 {
     File file;
+    ObservableList<Item> list;
 
     public FileSaver()
     {

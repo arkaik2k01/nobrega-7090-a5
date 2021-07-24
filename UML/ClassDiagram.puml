@@ -18,6 +18,7 @@ class Item {
 
 class FileLoader {
     File file
+    ObservableList list
 
     readFromTXT()
     readFromHTML()
@@ -27,6 +28,7 @@ class FileLoader {
 
 class FileSaver {
     File file
+    ObservableList list
 
     readToTxt()
     readToHTML()

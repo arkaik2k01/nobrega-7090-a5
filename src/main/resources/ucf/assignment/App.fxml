@@ -17,8 +17,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Load" />
+              <MenuItem mnemonicParsing="false" onAction="#saveInventory" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadInventory" text="Load" />
             </items>
           </Menu>
         </menus>

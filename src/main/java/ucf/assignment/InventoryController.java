@@ -11,8 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
+
 import java.math.BigDecimal;
-import java.util.Comparator;
 
 public class InventoryController {
 
@@ -212,5 +212,15 @@ public class InventoryController {
             //If serial equals Item from list
                 //update table view and scroll to item
         //Send alert "No item with serial found"
+    }
+
+    @FXML
+    void saveInventory(ActionEvent actionEvent)
+    {
+    }
+
+    @FXML
+    void loadInventory(ActionEvent actionEvent)
+    {
     }
 }
