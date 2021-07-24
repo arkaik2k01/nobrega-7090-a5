@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import java.math.BigDecimal;
+import java.util.Comparator;
 
 public class InventoryController {
 
@@ -61,6 +62,7 @@ public class InventoryController {
                 new FileChooser.ExtensionFilter("JSON", "*.json"));
     }
 
+    //Util classes
     void initializeNameColumn() {
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
@@ -100,6 +102,21 @@ public class InventoryController {
             BigDecimal newPrice = new BigDecimal(event.getNewValue());
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setPrice(newPrice.toString());
             invTable.refresh();
+        });
+        priceColumn.setComparator((o1, o2) -> {
+            BigDecimal num1 = new BigDecimal(o1);
+            BigDecimal num2 = new BigDecimal(o2);
+            if(num1.compareTo(num2) == 0)
+            {
+                return 0;
+            }
+            else if (num1.compareTo(num2) == -1) {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
         });
     }
 
