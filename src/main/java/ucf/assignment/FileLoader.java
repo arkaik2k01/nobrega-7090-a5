@@ -1,26 +1,56 @@
 package ucf.assignment;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.util.Scanner;
 
-public class FileLoader
+public class FileLoader extends FileUtil
 {
-    File file;
-    ObservableList<Item> list;
+    Scanner in;
 
-    public FileLoader()
-    {
-        //Files are set up on controller with setFile()
-    }
-
-    public File getFile()
-    {
-        return file;
-    }
-
-    public void setFile(File file)
+    public FileLoader(File file, ObservableList list)
     {
         this.file = file;
+        this.list = list;
+
+        try {
+            in = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public ObservableList<Item> readFromTXT()
+    {
+        ObservableList<Item> newList = FXCollections.observableArrayList();
+        try {
+            while (in.hasNextLine()) {
+                String itemRead = in.nextLine();
+                String[] tsvInput = itemRead.split("\t");
+                newList.add(new Item(tsvInput[0], tsvInput[1], new BigDecimal(tsvInput[2])));
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        return newList;
+    }
+
+    @Override
+    public ObservableList<Item> readFromJSON()
+    {
+        return null;
+    }
+
+    @Override
+    public ObservableList<Item> readFromHTML()
+    {
+        return null;
     }
 }

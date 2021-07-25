@@ -199,19 +199,61 @@ public class InventoryController {
     @FXML
     void searchByName(ActionEvent event) {
         //Get name to search from text field
-        //iterate through tableview
-            //If name equals Item from list
-                //update table view and scroll to item
+        String name = searchText.getText();
+        //iterate through table
+        final boolean found = findName(name, invTable);
         //Send alert "No item with name found
+        if(!found)
+        {
+            throwError("NO NAME FOUND", "No \""+name+"\" item has been found. Refer to readme for help.");
+        }
+    }
+
+    boolean findName(String name, TableView<Item> invTable)
+    {
+        final boolean[] found = {false};
+        invTable.getItems().forEach(item -> {
+            //If name equals Item from list
+            if(item.getName().equals(name))
+            {
+                Item foundItem = item;
+                //update table view and scroll to item
+                invTable.getSelectionModel().select(item);
+                invTable.scrollTo(item);
+                found[0] = true;
+            }
+        });
+        return found[0];
     }
 
     @FXML
     void searchBySerial(ActionEvent event) {
         //Get serial to search from text field
+        String serial = searchText.getText();
         //iterate through tableview
-            //If serial equals Item from list
-                //update table view and scroll to item
+        final boolean found = findSerial(serial, invTable);
         //Send alert "No item with serial found"
+        if(!found)
+        {
+            throwError("NO SERIAL FOUND", "No \""+serial+"\" serial number has been found. Refer to readme for help.");
+        }
+    }
+
+    boolean findSerial(String serial, TableView<Item> invTable)
+    {
+        final boolean[] found = {false};
+        invTable.getItems().forEach(item -> {
+            //If serial equals Item from list
+            if(item.getSerialNumber().equals(serial))
+            {
+                Item foundItem = item;
+                //update table view and scroll to item
+                invTable.getSelectionModel().select(item);
+                invTable.scrollTo(item);
+                found[0] = true;
+            }
+        });
+        return found[0];
     }
 
     @FXML

@@ -16,9 +16,19 @@ class Item {
     toString()
 }
 
-class FileLoader {
+class FileUtil {
     File file
     ObservableList list
+
+    readFromTXT()
+    readFromHTML()
+    readFromJSON()
+    readToTxt()
+    readToHTML()
+    readToJSON()
+}
+
+class FileLoader {
 
     readFromTXT()
     readFromHTML()
@@ -27,8 +37,6 @@ class FileLoader {
 }
 
 class FileSaver {
-    File file
-    ObservableList list
 
     readToTxt()
     readToHTML()
@@ -41,8 +49,9 @@ class InventoryController {
 }
 
 javafx.App*--InventoryController
-InventoryController--FileLoader
+InventoryController--FileUtil
 InventoryController--Item
-InventoryController--FileSaver
+FileUtil<|--FileSaver
+FileUtil<|--FileLoader
 
 @enduml
