@@ -12,7 +12,7 @@ public class FileSaver extends FileUtil
 {
     FileWriter out;
 
-    public FileSaver(File file, ObservableList list)
+    public FileSaver(File file, ObservableList<Item> list)
     {
         this.file = file;
         this.list = list;
@@ -33,7 +33,7 @@ public class FileSaver extends FileUtil
     @Override
     public boolean readToJSON()
     {
-        final boolean[] isSuccesful = {true};
+        final boolean[] isSuccessful = {true};
         try {
             list.forEach(item -> {
                 try {
@@ -41,37 +41,37 @@ public class FileSaver extends FileUtil
                     gsonItem.toJson(item, out);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    isSuccesful[0] = false;
+                    isSuccessful[0] = false;
                 }
             });
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
-            isSuccesful[0] = false;
+            isSuccessful[0] = false;
         }
 
-        return isSuccesful[0];
+        return isSuccessful[0];
     }
 
     @Override
     public boolean readToTXT()
     {
-        final boolean[] isSuccesful = {true};
+        final boolean[] isSuccessful = {true};
         try {
             list.forEach(item -> {
                 try {
                     out.write(item.name + "\t" + item.getSerialNumber() + "\t" + item.getPrice());
                 } catch (IOException e) {
                     e.printStackTrace();
-                    isSuccesful[0] = false;
+                    isSuccessful[0] = false;
                 }
             });
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
-            isSuccesful[0] = false;
+            isSuccessful[0] = false;
         }
 
-        return isSuccesful[0];
+        return isSuccessful[0];
     }
 }

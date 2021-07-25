@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -15,7 +14,7 @@ public class FileLoader extends FileUtil
 {
     Scanner in;
 
-    public FileLoader(File file, ObservableList list)
+    public FileLoader(File file, ObservableList<Item> list)
     {
         this.file = file;
         this.list = list;
@@ -50,12 +49,12 @@ public class FileLoader extends FileUtil
         ObservableList<Item> newList;
         Gson gsonItem = new Gson();
         try {
-            String jsonString = "";
+            StringBuilder jsonString = new StringBuilder();
             while (in.hasNextLine())
             {
-                jsonString += in.nextLine();
+                jsonString.append(in.nextLine());
             }
-            newList = FXCollections.observableArrayList(Arrays.asList(gsonItem.fromJson(jsonString, Item.class)));
+            newList = FXCollections.observableArrayList(Arrays.asList(gsonItem.fromJson(jsonString.toString(), Item.class)));
         } catch (Exception e) {
             e.printStackTrace();
             return null;

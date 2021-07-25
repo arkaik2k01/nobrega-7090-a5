@@ -67,7 +67,7 @@ public class InventoryController
     void initializeNameColumn()
     {
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameColumn.setOnEditCommit(
                 event -> {
                     String newName = event.getNewValue();
@@ -84,7 +84,7 @@ public class InventoryController
     void initializeSerialColumn()
     {
         serialColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        serialColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
+        serialColumn.setCellValueFactory(new PropertyValueFactory<>("serialNumber"));
         serialColumn.setOnEditCommit(event -> {
             String newSerial = event.getNewValue();
             if (checkIfSerialNotValid(newSerial, invData)) {
@@ -99,7 +99,7 @@ public class InventoryController
     void initializePriceColumn()
     {
         priceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        priceColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("price"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         priceColumn.setOnEditCommit(event -> {
             BigDecimal newPrice = new BigDecimal(event.getNewValue());
             event.getTableView().getItems().get(event.getTablePosition().getRow()).setPrice(newPrice.toString());
@@ -108,13 +108,7 @@ public class InventoryController
         priceColumn.setComparator((o1, o2) -> {
             BigDecimal num1 = new BigDecimal(o1);
             BigDecimal num2 = new BigDecimal(o2);
-            if (num1.compareTo(num2) == 0) {
-                return 0;
-            } else if (num1.compareTo(num2) == -1) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return Integer.compare(num1.compareTo(num2), 0);
         });
     }
 
@@ -209,7 +203,6 @@ public class InventoryController
         invTable.getItems().forEach(item -> {
             //If name equals Item from list
             if (item.getName().equals(name)) {
-                Item foundItem = item;
                 //update table view and scroll to item
                 invTable.getSelectionModel().select(item);
                 invTable.scrollTo(item);
@@ -238,7 +231,6 @@ public class InventoryController
         invTable.getItems().forEach(item -> {
             //If serial equals Item from list
             if (item.getSerialNumber().equals(serial)) {
-                Item foundItem = item;
                 //update table view and scroll to item
                 invTable.getSelectionModel().select(item);
                 invTable.scrollTo(item);
