@@ -59,8 +59,7 @@ public class FileSaver extends FileUtil
         tableHeader.addElement("th").addText("Serial Number");
         tableHeader.addElement("th").addText("Price");
         //Add each item from list to table
-        for(Item item : list)
-        {
+        for (Item item : list) {
             Element tableRow = table.addElement("tr");
             tableRow.addElement("th").addText(item.getName());
             tableRow.addElement("th").addText(item.getSerialNumber());
@@ -74,15 +73,8 @@ public class FileSaver extends FileUtil
     {
         final boolean[] isSuccessful = {true};
         try {
-            list.forEach(item -> {
-                try {
-                    Gson gsonItem = new GsonBuilder().setPrettyPrinting().create();
-                    gsonItem.toJson(item, out);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    isSuccessful[0] = false;
-                }
-            });
+            Gson gsonItem = new GsonBuilder().setPrettyPrinting().create();
+            gsonItem.toJson(list, out);
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,7 +91,7 @@ public class FileSaver extends FileUtil
         try {
             list.forEach(item -> {
                 try {
-                    out.write(item.name + "\t" + item.getSerialNumber() + "\t" + item.getPrice()+"\n");
+                    out.write(item.name + "\t" + item.getSerialNumber() + "\t" + item.getPrice() + "\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                     isSuccessful[0] = false;

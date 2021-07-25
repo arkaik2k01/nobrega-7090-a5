@@ -1,6 +1,7 @@
 package ucf.assignment;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,7 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,12 +44,13 @@ public class FileLoader extends FileUtil
                 String itemRead = in.nextLine();
                 String[] tsvInput = itemRead.split("\t");
                 newList.add(new Item(tsvInput[0], tsvInput[1], new BigDecimal(tsvInput[2])));
+                return newList;
             }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        return newList;
+        return null;
     }
 
     @Override
@@ -62,17 +65,22 @@ public class FileLoader extends FileUtil
             {
                 jsonString.append(in.nextLine());
             }
+
             //To prevent errors from EOF symbols, we set reader to lenient
             JsonReader reader = new JsonReader(new StringReader(jsonString.toString()));
             reader.setLenient(true);
-            //Pass reader to fromJson which parses the string and adds it to an array list
+            //Deserializer
+            //Pass reader to fromJson which parses the string and deserializes it
+            JSONList list = gsonItem.fromJson(reader, JSONList.class);
+            //Adds string to ArrayList
+            ArrayList<Item> tempList = list.getJsonItemList();
             //Then, we create an ObservableList with all elements from array list
-            newList = FXCollections.observableArrayList(Arrays.asList(gsonItem.fromJson(reader, Item.class)));
+            newList = FXCollections.observableArrayList(tempList);
+            return newList;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        return newList;
     }
 
     @Override
