@@ -63,7 +63,7 @@ public class InventoryController
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TSV", "*.txt"),
                 new FileChooser.ExtensionFilter("HTML", "*.html"),
                 new FileChooser.ExtensionFilter("JSON", "*.json"));
-        fileChooser.setInitialDirectory(new File("./src/main/resources/ucf/assignments"));
+        fileChooser.setInitialDirectory(new File("./src/main/resources/ucf/assignment"));
     }
 
     //Util classes
@@ -273,9 +273,8 @@ public class InventoryController
     private String getExtension(File file)
     {
         String fileString = file.toString();
-        String extension = "";
         int startOfExtension = fileString.lastIndexOf('.');
-        return extension = fileString.substring(startOfExtension+1);
+        return fileString.substring(startOfExtension+1);
     }
 
     @FXML
@@ -289,17 +288,20 @@ public class InventoryController
 
         if (extension.equalsIgnoreCase("txt"))
         {
-            invData = fileLoader.readFromTXT();
+            invData.clear();
+            invData.addAll(fileLoader.readFromTXT());
             invTable.refresh();
         }
         else if (extension.equalsIgnoreCase("html"))
         {
-            invData = fileLoader.readFromHTML();
+            invData.clear();
+            invData.addAll(fileLoader.readFromHTML());
             invTable.refresh();
         }
         else if (extension.equalsIgnoreCase("json"))
         {
-            invData = fileLoader.readFromJSON();
+            invData.clear();
+            invData.addAll(fileLoader.readFromJSON());
             invTable.refresh();
         }
         else

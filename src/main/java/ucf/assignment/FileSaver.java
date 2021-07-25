@@ -61,7 +61,7 @@ public class FileSaver extends FileUtil
         //Add each item from list to table
         for(Item item : list)
         {
-            Element tableRow = table.addElement("th");
+            Element tableRow = table.addElement("tr");
             tableRow.addElement("th").addText(item.getName());
             tableRow.addElement("th").addText(item.getSerialNumber());
             tableRow.addElement("th").addText(item.getPrice());

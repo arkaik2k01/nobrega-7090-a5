@@ -9,26 +9,6 @@ public class FileUtil
     File file;
     ObservableList<Item> list;
 
-    public File getFile()
-    {
-        return file;
-    }
-
-    public void setFile(File file)
-    {
-        this.file = file;
-    }
-
-    public ObservableList<Item> getList()
-    {
-        return list;
-    }
-
-    public void setList(ObservableList<Item> list)
-    {
-        this.list = list;
-    }
-
     public ObservableList<Item> readFromTXT()
     {
         return null;

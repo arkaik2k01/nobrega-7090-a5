@@ -1,6 +1,7 @@
 package ucf.assignment;
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jsoup.Jsoup;
@@ -10,6 +11,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,13 +55,19 @@ public class FileLoader extends FileUtil
     {
         ObservableList<Item> newList;
         Gson gsonItem = new Gson();
+        //Read in all the json lines and append to a string
         try {
             StringBuilder jsonString = new StringBuilder();
             while (in.hasNextLine())
             {
                 jsonString.append(in.nextLine());
             }
-            newList = FXCollections.observableArrayList(Arrays.asList(gsonItem.fromJson(jsonString.toString(), Item.class)));
+            //To prevent errors from EOF symbols, we set reader to lenient
+            JsonReader reader = new JsonReader(new StringReader(jsonString.toString()));
+            reader.setLenient(true);
+            //Pass reader to fromJson which parses the string and adds it to an array list
+            //Then, we create an ObservableList with all elements from array list
+            newList = FXCollections.observableArrayList(Arrays.asList(gsonItem.fromJson(reader, Item.class)));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -87,7 +95,7 @@ public class FileLoader extends FileUtil
             //Skipping the header, iterate through each row
             for(Element row : table.select("tr").subList(1, table.select("tr").size()))
             {
-                Elements infos = row.select("td");
+                Elements infos = row.select("th");
                 //Get information from row and create an item with info from row
                 Item newItem = new Item(infos.get(0).text(), infos.get(1).text(), new BigDecimal(infos.get(2).text()));
                 //Add new item to list
