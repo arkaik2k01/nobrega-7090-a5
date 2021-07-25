@@ -11,7 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.math.BigDecimal;
 
 public class InventoryController
@@ -46,7 +48,7 @@ public class InventoryController
     private TableColumn<Item, String> priceColumn;
 
     //File chooser
-    FileChooser filer = new FileChooser();
+    FileChooser fileChooser = new FileChooser();
 
     public void initialize()
     {
@@ -58,9 +60,10 @@ public class InventoryController
         invTable.setItems(invData);
 
         //File chooser initializer
-        filer.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TSV", "*.txt"),
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TSV", "*.txt"),
                 new FileChooser.ExtensionFilter("HTML", "*.html"),
                 new FileChooser.ExtensionFilter("JSON", "*.json"));
+        fileChooser.setInitialDirectory(new File("./src/main/resources/ucf/assignments"));
     }
 
     //Util classes
@@ -243,10 +246,65 @@ public class InventoryController
     @FXML
     void saveInventory(ActionEvent actionEvent)
     {
+        fileChooser.setTitle("Save file...");
+        File toSave = fileChooser.showSaveDialog(new Stage());
+        FileSaver fileSaver = new FileSaver(toSave, invData);
+
+        String extension = getExtension(toSave);
+
+        if(extension.equalsIgnoreCase("txt"))
+        {
+            fileSaver.readToTXT();
+        }
+        else if (extension.equalsIgnoreCase("html"))
+        {
+            fileSaver.readToHTML();
+        }
+        else if (extension.equalsIgnoreCase("json"))
+        {
+            fileSaver.readToJSON();
+        }
+        else
+        {
+            throwError("NON VALID FILE", "The file has an extension that is not supported by the program");
+        }
+    }
+
+    private String getExtension(File file)
+    {
+        String fileString = file.toString();
+        String extension = "";
+        int startOfExtension = fileString.lastIndexOf('.');
+        return extension = fileString.substring(startOfExtension+1);
     }
 
     @FXML
     void loadInventory(ActionEvent actionEvent)
     {
+        fileChooser.setTitle("Load file...");
+        File toLoad = fileChooser.showOpenDialog(new Stage());
+        FileLoader fileLoader = new FileLoader(toLoad, invData);
+
+        String extension = getExtension(toLoad);
+
+        if (extension.equalsIgnoreCase("txt"))
+        {
+            invData = fileLoader.readFromTXT();
+            invTable.refresh();
+        }
+        else if (extension.equalsIgnoreCase("html"))
+        {
+            invData = fileLoader.readFromHTML();
+            invTable.refresh();
+        }
+        else if (extension.equalsIgnoreCase("json"))
+        {
+            invData = fileLoader.readFromJSON();
+            invTable.refresh();
+        }
+        else
+        {
+            throwError("NON VALID FILE", "The file has an extension that is not supported by the program");
+        }
     }
 }
