@@ -71,10 +71,8 @@ public class FileLoader extends FileUtil
             reader.setLenient(true);
             //Deserializer
             //Pass reader to fromJson which parses the string and deserializes it
-            JSONList list = gsonItem.fromJson(reader, JSONList.class);
-            //Adds string to ArrayList
-            ArrayList<Item> tempList = list.getJsonItemList();
-            //Then, we create an ObservableList with all elements from array list
+            Type itemListType = new TypeToken<ArrayList<Item>>(){}.getType();
+            ArrayList<Item> tempList = gsonItem.fromJson(reader, itemListType);
             newList = FXCollections.observableArrayList(tempList);
             return newList;
         } catch (Exception e) {
