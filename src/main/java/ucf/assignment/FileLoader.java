@@ -1,11 +1,14 @@
 package ucf.assignment;
 
+import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class FileLoader extends FileUtil
@@ -34,8 +37,7 @@ public class FileLoader extends FileUtil
                 String[] tsvInput = itemRead.split("\t");
                 newList.add(new Item(tsvInput[0], tsvInput[1], new BigDecimal(tsvInput[2])));
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -45,7 +47,20 @@ public class FileLoader extends FileUtil
     @Override
     public ObservableList<Item> readFromJSON()
     {
-        return null;
+        ObservableList<Item> newList;
+        Gson gsonItem = new Gson();
+        try {
+            String jsonString = "";
+            while (in.hasNextLine())
+            {
+                jsonString += in.nextLine();
+            }
+            newList = FXCollections.observableArrayList(Arrays.asList(gsonItem.fromJson(jsonString, Item.class)));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return newList;
     }
 
     @Override

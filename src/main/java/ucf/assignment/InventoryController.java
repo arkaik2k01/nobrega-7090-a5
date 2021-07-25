@@ -14,7 +14,8 @@ import javafx.stage.FileChooser;
 
 import java.math.BigDecimal;
 
-public class InventoryController {
+public class InventoryController
+{
 
     //Buttons
     @FXML
@@ -63,14 +64,14 @@ public class InventoryController {
     }
 
     //Util classes
-    void initializeNameColumn() {
+    void initializeNameColumn()
+    {
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         nameColumn.setOnEditCommit(
                 event -> {
                     String newName = event.getNewValue();
-                    if(checkIfNameNotValid(newName))
-                    {
+                    if (checkIfNameNotValid(newName)) {
                         newName = event.getOldValue();
                     }
                     event.getTableView().getItems().get(event.getTablePosition().getRow())
@@ -80,13 +81,13 @@ public class InventoryController {
         );
     }
 
-    void initializeSerialColumn() {
+    void initializeSerialColumn()
+    {
         serialColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         serialColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
         serialColumn.setOnEditCommit(event -> {
             String newSerial = event.getNewValue();
-            if(checkIfSerialNotValid(newSerial, invData))
-            {
+            if (checkIfSerialNotValid(newSerial, invData)) {
                 newSerial = event.getOldValue();
             }
             event.getTableView().getItems().get(event.getTablePosition().getRow())
@@ -95,7 +96,8 @@ public class InventoryController {
         });
     }
 
-    void initializePriceColumn() {
+    void initializePriceColumn()
+    {
         priceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         priceColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("price"));
         priceColumn.setOnEditCommit(event -> {
@@ -106,15 +108,11 @@ public class InventoryController {
         priceColumn.setComparator((o1, o2) -> {
             BigDecimal num1 = new BigDecimal(o1);
             BigDecimal num2 = new BigDecimal(o2);
-            if(num1.compareTo(num2) == 0)
-            {
+            if (num1.compareTo(num2) == 0) {
                 return 0;
-            }
-            else if (num1.compareTo(num2) == -1) {
+            } else if (num1.compareTo(num2) == -1) {
                 return -1;
-            }
-            else
-            {
+            } else {
                 return 1;
             }
         });
@@ -135,15 +133,13 @@ public class InventoryController {
     {
         final boolean[] isNotValid = {false};
 
-        if(serial.length() != 10)
-        {
+        if (serial.length() != 10) {
             throwError("NON VALID SERIAL", "Your serial number is not 10 characters in length");
             isNotValid[0] = true;
         }
         //For each item in invData, check if serial is equals to item's serial number
         invData.forEach(item -> {
-            if(item.getSerialNumber().equalsIgnoreCase(serial))
-            {
+            if (item.getSerialNumber().equalsIgnoreCase(serial)) {
                 throwError("NON VALID SERIAL", "The serial number you have added already exists");
                 isNotValid[0] = true;
             }
@@ -155,8 +151,7 @@ public class InventoryController {
     boolean checkIfNameNotValid(String name)
     {
         boolean isNotValid = false;
-        if(!(name.length() >= 2 && name.length() <= 256))
-        {
+        if (!(name.length() >= 2 && name.length() <= 256)) {
             throwError("NON VALID NAME", "Your name is not within the range of chars allowed for names");
             isNotValid = true;
         }
@@ -169,15 +164,13 @@ public class InventoryController {
     {
         //Get text from nameText
         String name = nameText.getText();
-        if(checkIfNameNotValid(name))
-        {
+        if (checkIfNameNotValid(name)) {
             return;
         }
         //Get text from serialText
         String serial = serialText.getText();
         //Check text length == 10 and not repeated, if not return
-        if(checkIfSerialNotValid(serial, invData))
-        {
+        if (checkIfSerialNotValid(serial, invData)) {
             return;
         }
         //Get number from priceText
@@ -189,7 +182,8 @@ public class InventoryController {
     }
 
     @FXML
-    void deleteItem(ActionEvent event) {
+    void deleteItem(ActionEvent event)
+    {
         //Get selected item from table
         Item toRemove = invTable.getFocusModel().getFocusedItem();
         //Remove item from observable list
@@ -197,15 +191,15 @@ public class InventoryController {
     }
 
     @FXML
-    void searchByName(ActionEvent event) {
+    void searchByName(ActionEvent event)
+    {
         //Get name to search from text field
         String name = searchText.getText();
         //iterate through table
         final boolean found = findName(name, invTable);
         //Send alert "No item with name found
-        if(!found)
-        {
-            throwError("NO NAME FOUND", "No \""+name+"\" item has been found. Refer to readme for help.");
+        if (!found) {
+            throwError("NO NAME FOUND", "No \"" + name + "\" item has been found. Refer to readme for help.");
         }
     }
 
@@ -214,8 +208,7 @@ public class InventoryController {
         final boolean[] found = {false};
         invTable.getItems().forEach(item -> {
             //If name equals Item from list
-            if(item.getName().equals(name))
-            {
+            if (item.getName().equals(name)) {
                 Item foundItem = item;
                 //update table view and scroll to item
                 invTable.getSelectionModel().select(item);
@@ -227,15 +220,15 @@ public class InventoryController {
     }
 
     @FXML
-    void searchBySerial(ActionEvent event) {
+    void searchBySerial(ActionEvent event)
+    {
         //Get serial to search from text field
         String serial = searchText.getText();
         //iterate through tableview
         final boolean found = findSerial(serial, invTable);
         //Send alert "No item with serial found"
-        if(!found)
-        {
-            throwError("NO SERIAL FOUND", "No \""+serial+"\" serial number has been found. Refer to readme for help.");
+        if (!found) {
+            throwError("NO SERIAL FOUND", "No \"" + serial + "\" serial number has been found. Refer to readme for help.");
         }
     }
 
@@ -244,8 +237,7 @@ public class InventoryController {
         final boolean[] found = {false};
         invTable.getItems().forEach(item -> {
             //If serial equals Item from list
-            if(item.getSerialNumber().equals(serial))
-            {
+            if (item.getSerialNumber().equals(serial)) {
                 Item foundItem = item;
                 //update table view and scroll to item
                 invTable.getSelectionModel().select(item);

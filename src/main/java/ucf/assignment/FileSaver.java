@@ -1,5 +1,7 @@
 package ucf.assignment;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.collections.ObservableList;
 
 import java.io.File;
@@ -31,21 +33,45 @@ public class FileSaver extends FileUtil
     @Override
     public boolean readToJSON()
     {
-        return true;
+        final boolean[] isSuccesful = {true};
+        try {
+            list.forEach(item -> {
+                try {
+                    Gson gsonItem = new GsonBuilder().setPrettyPrinting().create();
+                    gsonItem.toJson(item, out);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    isSuccesful[0] = false;
+                }
+            });
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            isSuccesful[0] = false;
+        }
+
+        return isSuccesful[0];
     }
 
     @Override
     public boolean readToTXT()
     {
         final boolean[] isSuccesful = {true};
-        list.forEach(item -> {
-            try {
-                out.write(item.name+"\t"+item.getSerialNumber()+"\t"+item.getPrice());
-            } catch (IOException e) {
-                e.printStackTrace();
-                isSuccesful[0] = false;
-            }
-        });
+        try {
+            list.forEach(item -> {
+                try {
+                    out.write(item.name + "\t" + item.getSerialNumber() + "\t" + item.getPrice());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    isSuccesful[0] = false;
+                }
+            });
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            isSuccesful[0] = false;
+        }
+
         return isSuccesful[0];
     }
 }
